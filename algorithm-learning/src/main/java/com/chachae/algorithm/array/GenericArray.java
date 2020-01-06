@@ -101,6 +101,14 @@ public class GenericArray<E> {
     return data[index];
   }
 
+  public E getFirst() {
+    return get(0);
+  }
+
+  public E getLast() {
+    return get(size - 1);
+  }
+
   /**
    * 查看元素是否存在
    *

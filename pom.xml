@@ -6,6 +6,7 @@
     <modules>
         <module>algorithm-learning</module>
         <module>leetcode-learning</module>
+        <module>blue-bridge-learning</module>
     </modules>
     <groupId>com.chachae.leetcode</groupId>
     <artifactId>leetcode-project</artifactId>

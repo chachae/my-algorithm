@@ -18,4 +18,16 @@ public class MainTest {
     stack.pop();
     System.out.println(stack);
   }
+
+  @Test
+  public void testLinkedListStack() {
+    LinkedListStack<Integer> stack = new LinkedListStack<>();
+    int count = 5;
+    for (int i = 0; i < count; i++) {
+      stack.push(i);
+      System.out.println(stack);
+    }
+    stack.pop();
+    System.out.println(stack);
+  }
 }

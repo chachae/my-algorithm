@@ -6,80 +6,46 @@ package com.chachae.algorithm.array;
  * @author chachae
  * @since 2020/1/5 13:45
  */
+@SuppressWarnings("unchecked")
 public class GenericArray<E> {
 
-  // 数组内容
   private E[] data;
-  // 元素个数
   private int size;
 
-  @SuppressWarnings("unchecked")
+  // 构造函数，传入数组的容量capacity构造Array
   public GenericArray(int capacity) {
     data = (E[]) new Object[capacity];
+    size = 0;
   }
 
-  /** 默认容量为10 */
+  // 无参数的构造函数，默认数组的容量capacity=10
   public GenericArray() {
     this(10);
   }
 
-  /**
-   * 元素个数
-   *
-   * @return int
-   */
-  public int getSize() {
-    return size;
-  }
-
-  /**
-   * 数组容量
-   *
-   * @return int
-   */
+  // 获取数组的容量
   public int getCapacity() {
     return data.length;
   }
 
-  /**
-   * 是否为空
-   *
-   * @return boolean
-   */
+  // 获取数组中的元素个数
+  public int getSize() {
+    return size;
+  }
+
+  // 返回数组是否为空
   public boolean isEmpty() {
-    return data.length == 0;
+    return size == 0;
   }
 
-  /**
-   * 向数组中追加元素
-   *
-   * @param e 元素
-   */
-  public void addLast(E e) {
-    add(size, e);
-  }
-
-  /**
-   * 索引0的位置插入元如
-   *
-   * @param e 待插入的元素
-   */
-  public void addFirst(E e) {
-    add(0, e);
-  }
-
-  /**
-   * 向指定索引位置添加元素
-   *
-   * @param index 索引位置
-   * @param e 待插入的元素
-   */
+  // 在index索引的位置插入一个新元素e
   public void add(int index, E e) {
+
     if (index < 0 || index > size) {
-      throw new IllegalArgumentException("add fail. Index error");
+      throw new IllegalArgumentException("Add failed. Require index >= 0 and index <= size.");
     }
     if (size == data.length) {
-      throw new IllegalArgumentException("add fail. Array is full");
+      resize(2 * data.length);
     }
     for (int i = size - 1; i >= index; i--) {
       data[i + 1] = data[i];
@@ -88,48 +54,53 @@ public class GenericArray<E> {
     size++;
   }
 
-  /**
-   * 获取索引位置上的元素
-   *
-   * @param index 索引
-   * @return 该位置上的元素
-   */
-  public E get(int index) {
-    if (index < 0 || index > size) {
-      throw new IllegalArgumentException("add fail. Index error");
-    }
-    return data[index];
+  // 向所有元素后添加一个新元素
+  public void addLast(E e) {
+    add(size, e);
   }
 
-  public E getFirst() {
-    return get(0);
+  // 在所有元素前添加一个新元素
+  public void addFirst(E e) {
+    add(0, e);
+  }
+
+  // 获取index索引位置的元素
+  public E get(int index) {
+    if (index < 0 || index >= size) {
+      throw new IllegalArgumentException("Get failed. Index is illegal.");
+    }
+    return data[index];
   }
 
   public E getLast() {
     return get(size - 1);
   }
 
-  /**
-   * 查看元素是否存在
-   *
-   * @param e 元素
-   */
+  public E getFirst() {
+    return get(0);
+  }
+
+  // 修改index索引位置的元素为e
+  public void set(int index, E e) {
+    if (index < 0 || index >= size) {
+      throw new IllegalArgumentException("Set failed. Index is illegal.");
+    }
+    data[index] = e;
+  }
+
+  // 查找数组中是否有元素e
   public boolean contains(E e) {
-    for (E elem : data) {
-      if (elem.equals(e)) {
+    for (int i = 0; i < size; i++) {
+      if (data[i].equals(e)) {
         return true;
       }
     }
     return false;
   }
 
-  /**
-   * 获取元素索引位置
-   *
-   * @param e 元素
-   */
+  // 查找数组中元素e所在的索引，如果不存在元素e，则返回-1
   public int find(E e) {
-    for (int i = 0; i < data.length; i++) {
+    for (int i = 0; i < size; i++) {
       if (data[i].equals(e)) {
         return i;
       }
@@ -137,60 +108,34 @@ public class GenericArray<E> {
     return -1;
   }
 
-  /**
-   * 修改索引位置的元素
-   *
-   * @param index 索引位置
-   * @param e 新元素
-   */
-  public void set(int index, E e) {
-    if (index < 0 || index > size) {
-      throw new IllegalArgumentException("add fail. Index error");
-    }
-    data[index] = e;
-  }
-
-  /**
-   * 移除索引下的元素
-   *
-   * @param index 索引位置
-   * @return 被删除的元素值
-   */
+  // 从数组中删除index位置的元素, 返回删除的元素
   public E remove(int index) {
-    if (index < 0 || index > size) {
-      throw new IllegalArgumentException("add fail. Index error");
+    if (index < 0 || index >= size) {
+      throw new IllegalArgumentException("Remove failed. Index is illegal.");
     }
+
     E ret = data[index];
-    for (int i = index + 1; i <= size; i++) {
-      data[i - 1] = data[i];
-    }
+    for (int i = index + 1; i < size; i++) data[i - 1] = data[i];
     size--;
+    data[size] = null;
+
+    if (size == data.length / 4 && data.length / 2 != 0) {
+      resize(data.length / 2);
+    }
     return ret;
   }
 
-  /**
-   * 移除第一个元素
-   *
-   * @return 被删除元素的值
-   */
+  // 从数组中删除第一个元素, 返回删除的元素
   public E removeFirst() {
     return remove(0);
   }
 
-  /**
-   * 移除最后一个元素
-   *
-   * @return 被删除元素的值
-   */
+  // 从数组中删除最后一个元素, 返回删除的元素
   public E removeLast() {
     return remove(size - 1);
   }
 
-  /**
-   * 移除元素
-   *
-   * @return 被删除元素值
-   */
+  // 从数组中删除元素e
   public void removeElement(E e) {
     int index = find(e);
     if (index != -1) {
@@ -200,16 +145,26 @@ public class GenericArray<E> {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(String.format("Array size : %s ,Array capacity: %s\n", size, data.length));
-    sb.append("[");
+
+    StringBuilder res = new StringBuilder();
+    res.append(String.format("Array: size = %d , capacity = %d\n", size, data.length));
+    res.append('[');
     for (int i = 0; i < size; i++) {
-      sb.append(data[i]);
+      res.append(data[i]);
       if (i != size - 1) {
-        sb.append(", ");
+        res.append(", ");
       }
     }
-    sb.append("]");
-    return sb.toString();
+    res.append(']');
+    return res.toString();
+  }
+
+  // 将数组空间的容量变成newCapacity大小
+  private void resize(int newCapacity) {
+    E[] newData = (E[]) new Object[newCapacity];
+    if (size >= 0) {
+      System.arraycopy(data, 0, newData, 0, size);
+    }
+    data = newData;
   }
 }

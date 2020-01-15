@@ -4,6 +4,8 @@ import com.chachae.leetcode.common.ListNode;
 import org.junit.jupiter.api.Test;
 
 /**
+ * <a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/"></a>
+ *
  * @author chachae
  * @since 2020/1/9 22:52
  */
@@ -27,15 +29,30 @@ public class No0083 {
   public ListNode deleteDuplicates(ListNode head) {
     ListNode dummy = new ListNode(0);
     dummy.next = head;
-    ListNode fastNode = head;
-    while (fastNode != null) {
-      if (fastNode.next != null && fastNode.val == fastNode.next.val) {
-        fastNode.next = fastNode.next.next;
+    ListNode fast = head;
+    while (fast != null) {
+      if (fast.next != null && fast.val == fast.next.val) {
+        fast.next = fast.next.next;
       } else {
-        fastNode = fastNode.next;
+        fast = fast.next;
       }
     }
-
     return dummy.next;
+  }
+
+  /** Others solution */
+  public ListNode deleteDuplicates2(ListNode pHead) {
+    if (pHead == null || pHead.next == null) {
+      return pHead;
+    }
+    ListNode next = pHead.next;
+    if (next.val == pHead.val) {
+      next = next.next;
+      while (next != null && next.val == pHead.val) {
+        next = next.next;
+      }
+    }
+    pHead.next = deleteDuplicates2(next);
+    return pHead;
   }
 }

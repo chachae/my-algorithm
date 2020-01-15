@@ -14,7 +14,7 @@ public class Example1 {
     if (a < b) {
       ts1(a, b - 1);
     }
-    System.out.println(b);
+    System.out.print(b + " ");
   }
 
   public String ts2(String s) {
@@ -24,9 +24,21 @@ public class Example1 {
     return ts2(s.substring(1)) + s.charAt(0);
   }
 
+  public String ts3(String s) {
+    StringBuilder sb = new StringBuilder(s);
+    return sb.reverse().toString();
+  }
+
   @Test
   public void test() {
     // ts1(1, 10);
     System.out.println(ts2("abcde"));
+    System.out.println(ts3("abcde"));
+  }
+
+  @Test
+  public void test2() {
+    String a = "abcde";
+    System.out.println(a.substring(1) + a.charAt(0));
   }
 }

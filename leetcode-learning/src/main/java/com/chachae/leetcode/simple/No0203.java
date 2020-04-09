@@ -14,27 +14,15 @@ public class No0203 {
   @Test
   public void test() {
     // 1->2->6->3->4->5->6, val = 6
-    ListNode node = new ListNode(1);
-    node.next = new ListNode(1);
-    node.next.next = new ListNode(6);
-    node.next.next.next = new ListNode(3);
-    node.next.next.next.next = new ListNode(4);
-    node.next.next.next.next.next = new ListNode(5);
-    node.next.next.next.next.next.next = new ListNode(6);
-    ListNode listNode = removeElements(node, 1);
-    while (listNode != null) {
-      System.out.println("result: " + listNode.val);
-      listNode = listNode.next;
-    }
+    ListNode node = new ListNode(new int[]{1, 2, 6, 3, 4, 5, 6});
+    ListNode listNode = removeElements2(node, 6);
+    System.out.println(listNode.toString());
   }
 
   public ListNode removeElements(ListNode head, int val) {
-    // 带头节点的链表
-    ListNode header = new ListNode(-1);
-    // 带头结点链表的下一个指向head
-    header.next = head;
-    // cur 指向带头结点的新链表
-    ListNode cur = header;
+    ListNode node = new ListNode(0);
+    node.next = head;
+    ListNode cur = node;
     while (cur.next != null) {
       if (cur.next.val == val) {
         cur.next = cur.next.next;
@@ -42,6 +30,19 @@ public class No0203 {
         cur = cur.next;
       }
     }
-    return header.next;
+    return node.next;
+  }
+
+  /**
+   * 递归解法
+   */
+  public ListNode removeElements2(ListNode head, int val) {
+
+    if (head == null) {
+      return null;
+    }
+
+    head.next = removeElements2(head.next, val);
+    return head.val == val ? head.next : head;
   }
 }

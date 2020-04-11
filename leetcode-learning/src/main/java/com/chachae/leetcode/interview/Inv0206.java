@@ -18,24 +18,36 @@ public class Inv0206 {
     System.out.println(isPalindrome(node));
   }
 
-
   public boolean isPalindrome(ListNode head) {
-    ListNode node = head;
-    reverse(head);
-    System.out.println(node);
-    System.out.println(head);
-    return true;
-  }
 
-  private ListNode reverse(ListNode head) {
-    ListNode pre = null, cur = head, next;
+    ListNode fast = head;
+    ListNode slow = head;
+
+    // 快慢指针找中点
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+
+    // rev slow
+    ListNode pre = null, cur = slow, temp;
     while (cur != null) {
-      next = cur.next;
+      temp = cur.next;
       cur.next = pre;
       pre = cur;
-      cur = next;
+      cur = temp;
     }
-    return pre;
+
+    // 前后两段比较是否一致
+    ListNode old = head;
+    while (pre != null) {
+      if (pre.val != old.val) {
+        return false;
+      }
+      head = head.next;
+      pre = pre.next;
+    }
+    return true;
   }
 
 }

@@ -16,6 +16,31 @@ public class TreeNode {
     val = x;
   }
 
+  public void add(int e) {
+    add(this, e);
+  }
+
+  /**
+   * 添加元素
+   *
+   * @param node 当前节点
+   * @param e    元素
+   * @return new TreeNode
+   */
+  private TreeNode add(TreeNode node, int e) {
+    if (node == null) {
+      return new TreeNode(e);
+    }
+
+    if (e < node.val) {
+      node.left = add(node.left, e);
+    } else if (e > node.val) {
+      node.right = add(node.right, e);
+    }
+
+    return node;
+  }
+
   /**
    * 前序遍历（非递归方法）
    */

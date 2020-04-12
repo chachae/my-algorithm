@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
  * @author chachae
  * @since 2020/4/11 23:43
  */
-public class Main {
+public class MyLinkedListTest {
 
   /**
    *

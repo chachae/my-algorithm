@@ -6,7 +6,6 @@ package com.chachae.leetcode.design;
  */
 public class MyLinkedList {
 
-
   /**
    * Initialize your data structure here.
    */
@@ -15,6 +14,8 @@ public class MyLinkedList {
   private int capacity;
 
   private int size;
+
+  private static final float FACTOR = 0.75f;
 
   public MyLinkedList(int capacity) {
     data = new int[capacity];
@@ -30,7 +31,7 @@ public class MyLinkedList {
    * Get the value of the index-th node in the linked list. If the index is invalid, return -1.
    */
   public int get(int index) {
-    if (index < 0 || index > capacity || index >= size) {
+    if (index < 0 || index >= size) {
       return -1;
     }
     for (int i = 0; i < size; i++) {
@@ -42,10 +43,10 @@ public class MyLinkedList {
   }
 
   private void ensureCapacity() {
-    if (size * 1.6 > capacity) {
+    if (size > capacity * FACTOR) {
       capacity = capacity << 1;
       int[] newData = new int[capacity];
-      System.arraycopy(data, 0, newData, 0, data.length);
+      System.arraycopy(data, 0, newData, 0, size);
       data = newData;
     }
   }
@@ -56,7 +57,7 @@ public class MyLinkedList {
    */
   public void addAtHead(int val) {
     ensureCapacity();
-    System.arraycopy(data, 0, data, 1, size - 1 + 1);
+    System.arraycopy(data, 0, data, 1, size);
     data[0] = val;
     size++;
   }
@@ -95,10 +96,7 @@ public class MyLinkedList {
    * Delete the index-th node in the linked list, if the index is valid.
    */
   public void deleteAtIndex(int index) {
-    // index = 3
-    // 0 1 2 3 4 5 6 7 8 9
-    // 1 2 3 4 5 6 7 8 9 10
-    if (index < capacity && index < size) {
+    if (index < size) {
       System.arraycopy(data, index + 1, data, index, size - index);
       data[size - 1] = 0;
       size--;
